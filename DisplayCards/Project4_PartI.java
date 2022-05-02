@@ -1,9 +1,9 @@
 /*
  * /
  * Write a program that displays three cards randomly selected from a deck of 52 cards 
- * The card images files are name 1.png, 2.png, 3.png ¡­ 52.png and can be obtained from 
+ * The card images files are name 1.png, 2.png, 3.png Â¡Â­ 52.png and can be obtained from 
  * the course website. All three cards are distinct and selected randomly.
- * Hint: You can select random cards by storing the numbers 1 ¨C 52 to an arraylist,
+ * Hint: You can select random cards by storing the numbers 1 Â¨C 52 to an arraylist,
  * perform a random shuffle, and use the first three numbers in the arraylist as the files names 
  * for the image.
  * You MUST implement your own random shuffle logic (do NOT use classes/methods directly 
@@ -13,7 +13,7 @@
 
 
 /* 
- * @Author: Yinglun Zhan
+ * @Author: Y.Z.
  * Date: 6/20/2017
  * 
  */
