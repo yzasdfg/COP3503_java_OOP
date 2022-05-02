@@ -36,7 +36,7 @@
  */
 
 /* 
- * @Author: Yinglun Zhan
+ * @Author: Y.Z.
  * Date: 5/20/2017
  * 
  */
