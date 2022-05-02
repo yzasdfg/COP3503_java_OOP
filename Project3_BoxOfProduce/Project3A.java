@@ -20,22 +20,6 @@
  * delivered. If you create additional methods to select the random items and to select
  * valid substitutions, then your main method will be simpler to write.
  * 
- * Modify the main method with a loop so that an arbitrary number of BoxOfProduce objects 
- * are created and substitutions are allowed for each box. Add a menu so the user can 
- * decide when to stop creating boxes.
- * 
- * You would like to throw in a free recipe flyer for salsa verde if the box contains
- * tomatillos. However, there are only five recipe flyers. Add a static variable to the 
- * BoxOfProduce class that counts the number of recipe flyers remaining and initialize it
- * to 5. Also add an instance variable that indicates whether or not the box contains 
- * a recipe flyer and modify the toString() method to also output ¡°salsa verde recipe¡± 
- * if the box contains a recipe flyer. Finally, add logic inside the class so that if 
- * the box contains at least one order of tomatillos then it automatically gets a 
- * recipe flyer until all of the recipe flyers are gone. Note that a box should only 
- * get one recipe flyer even if there are multiple orders of tomatillos.
- * 
- * Test your class by creating boxes with tomatillos from your menu until 
- * all of the flyers are gone.
  * 
  */
 
@@ -44,9 +28,8 @@
  * Date: 6/14/2017
  * 
  */
-import java.util.Random;
 import java.util.Scanner;
-
+import java.util.Random;
 
 /**define a class BoxOfProduce*/
 
@@ -55,9 +38,7 @@ class BoxOfProduce {
 	private String fruit1;
 	private String fruit2;
 	private String fruit3;
-	private static int numRecipeRemaining=5;
-	private boolean hasRecipe=false;
-
+	
 	public BoxOfProduce(){
 		fruit1="";
 		fruit2="";
@@ -69,11 +50,7 @@ class BoxOfProduce {
 		this.fruit1=fruit1;
 		this.fruit2=fruit2;
 		this.fruit3=fruit3;
-
-		//setFruit1(fruit1);
-		//setFruit2(fruit2);
-		//setFruit3(fruit3);
-
+	
 	}
 
 
@@ -111,40 +88,19 @@ class BoxOfProduce {
 	/** return a String of the complete contents of the box*/
 	public String toString()
 	{
-
-		// if there are some Recipe flyer left and the box contains tomatillos, throw a flyer in the box.
-		if (numRecipeRemaining!=0 && !hasRecipe && (fruit1.contains("Tomatillo")||fruit2.contains("Tomatillo")||fruit3.contains("Tomatillo"))){
-			hasRecipe=true;
-			numRecipeRemaining--;
-		}
-
-		// if the user substitute all tomatillos by other product, take the flyer out of the box.
-		if (hasRecipe && (!fruit1.contains("Tomatillo")&&!fruit2.contains("Tomatillo")&&!fruit3.contains("Tomatillo"))){
-			hasRecipe=false;
-			numRecipeRemaining++;
-		}
-
-		// return a String according to if the box has a recipe flyer or not
-		if (hasRecipe){			
-			return "1 : " + fruit1 + "\n" + "2 : " + fruit2 + "\n" + "3 : " + fruit3+ "\n" 
-					+ "Salsa verde recipe in the box: 1\n" + "Reciept remaining: "+ numRecipeRemaining + "\n";
-		}else
-			return "1 : " + fruit1 + "\n" + "2 : " + fruit2 + "\n" + "3 : " + fruit3+ "\n" 
-			+ "Salsa verde recipe in the box: 0\n" + "Reciept remaining: "+ numRecipeRemaining + "\n";
+		return "1 : " + fruit1 + "\n" + "2 : " + fruit2 + "\n" + "3 : " + fruit3;
 	}
 
 }
 
 
-public class Project3B {
+public class Project3A {
 	public static void main (String[] args) throws Exception{
 		final int fullLength=5;
 		final int boxLength=3;
 		boolean isInput1Valid=false;
 		boolean isInput2Valid=false;
-		boolean createBox=true;
 		boolean ifContinue=true;
-		int boxCount=0;
 
 		// Create a full fruit list
 		String[] fruitList=new String[fullLength];
@@ -157,51 +113,39 @@ public class Project3B {
 
 		readFile(fruitList);
 		displayWholeList(fruitList);
+		selectBoxFruit(index, boxFruit, fruitList);
 
-		while (createBox){
-			boxCount++;
-			ifContinue=true;
-			System.out.println("\nNumber of boxes: "+boxCount);
-			selectBoxFruit(index, boxFruit, fruitList);
+		//Create a BoxOFProduce object
+		BoxOfProduce box=new BoxOfProduce(boxFruit[0], boxFruit[1], boxFruit[2]);
 
-			//Create a BoxOFProduce object
-			BoxOfProduce box=new BoxOfProduce(boxFruit[0], boxFruit[1], boxFruit[2]);
-
-			//display the box content
-
-			System.out.println(box.toString());
+		while (ifContinue){
+			System.out.print("Enter the fruit item from the whole list that you want to put in the box(1-5): ");
+			int input1=input.nextInt();
+			input1=getValidInput1(isInput1Valid, input1);
 
 
-			while (ifContinue){
-				System.out.print("Enter the fruit item from the whole list that you want to put in the box(1-5): ");
-				int input1=input.nextInt();
-				input1=getValidInput1(isInput1Valid, input1);
-
-
-				System.out.print("Enter the fruit item in the box that you want to be substituted(1-3): ");
-				int input2=input.nextInt();
-				input2=getValidInput2(isInput2Valid, input2);
-
-				// do the substitution
-				if (input2==1){
-					box.setFruit1(fruitList[input1-1]);
-				}
-				else if (input2==2){
-					box.setFruit2(fruitList[input1-1]);
-				}
-				else{
-					box.setFruit3(fruitList[input1-1]);
-				}
-				System.out.println("After the substition, the contents of the box is: ");
-				System.out.println(box.toString());
-
-				// if the user want to do one more substitution
-				ifContinue=isDoneSubstitution(ifContinue);
+			System.out.print("Enter the fruit item in the box that you want to be substituted(1-3): ");
+			int input2=input.nextInt();
+			input2=getValidInput2(isInput2Valid, input2);
+			
+			// do the substitution
+			if (input2==1){
+				box.setFruit1(fruitList[input1-1]);
 			}
-
-			createBox=isCreateOneBox(createBox, ifContinue);
+			else if (input2==2){
+				box.setFruit2(fruitList[input1-1]);
+			}
+			else{
+				box.setFruit3(fruitList[input1-1]);
+			}
+			System.out.println("\nAfter the substitution, the contents of the box is: ");
+			System.out.println(box.toString());
+			// if the user want to one more substitution
+			ifContinue=isDoneSubstitution(ifContinue);
 		}
-		System.out.println("\nStop creating boxes, the total number of boxes: "+boxCount);
+
+		System.out.println("\nThe final contents of the box is: ");
+		System.out.println(box.toString());
 	}
 
 
@@ -209,7 +153,6 @@ public class Project3B {
 
 	/** read the whole list from a text file*/
 	public static void readFile(String[] list )throws Exception{
-
 		//Create a file instance
 		java.io.File file = new java.io.File("list.txt");
 
@@ -220,7 +163,7 @@ public class Project3B {
 		int i=0;
 		while(input.hasNext()){
 			String content=input.next();
-			list[i]=content;
+			list[i]=content;       //store whole fruit list into an Array with index 0-4.
 			i++;
 		}
 
@@ -234,18 +177,19 @@ public class Project3B {
 		for (int i=0; i<list.length; i++){
 			System.out.println(i+1 + ": " + list[i]);
 		}
-
+		System.out.println();
 	}
 
 	/** randomly select three fruit from the whole list in the box, then display the box list*/
 	public static void selectBoxFruit(int[] index, String[] box, String[] list){
 		System.out.println("The three fruits in the box is: ");
 		for (int i=0; i<3; i++){
-			Random rdm=new Random();
-			index[i]=rdm.nextInt(5);
-			box[i]=list[index[i]];	
-			//BoxOfProduce box=new BoxOfProduce(boxFruit[0], boxFruit[1], boxFruit[2]);
+			Random rdm= new Random();
+			index[i]=rdm.nextInt(5);   //randomly generate three index number 0-4.
+			box[i]=list[index[i]];	   //assign the fruit item corresponds with the index.
+			System.out.println((i+1) + ": " + box[i]);
 		}
+		System.out.println();
 	}
 
 	/** get the valid input from the user for the fruit item in the whole list, between 1-5, inclusive*/
@@ -286,28 +230,15 @@ public class Project3B {
 	/** prompt to ask the user if continue substitution*/
 	public static boolean isDoneSubstitution(boolean substitution){
 		Scanner scan=new Scanner(System.in);
-		System.out.print("Press Y to continue subsitutions, others to exit substitution: ");
+		System.out.print("\nPress Y to continue subsitutions, others to exit substitution: ");
 		String input=scan.nextLine();
 		char result=input.charAt(0);
 
 		substitution=(result=='Y'||result=='y')? true:false;
 		return substitution;
 	}
-
-
-	public static boolean isCreateOneBox(boolean create,boolean substitution){
-		Scanner scan=new Scanner(System.in);
-
-		System.out.print("\nPress Y to create one more box, others to stop creating: ");
-
-		String input=scan.nextLine();
-		char result=input.charAt(0);
-
-		create= (result=='Y'||result=='y')? true:false;
-
-		return create;
-	}
 }
+
 
 
 
